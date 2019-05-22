@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.zx.sell.dataobject.OrderDetail;
 import com.zx.sell.enums.OrderStatusEnum;
 import com.zx.sell.enums.PayStatusEnum;
+import com.zx.sell.utils.EnumUtil;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -35,4 +36,15 @@ public class OrderDTO {
     private Date updateTime;
 
     private List<OrderDetail> orderDetailList;
+
+    //加上这个注解数据转成json格式时会自动忽略这个字段
+    @JsonInclude
+    public OrderStatusEnum getOrderStatusEnum() {
+        return EnumUtil.getByCode(orderStatus,OrderStatusEnum.class);
+    }
+
+    @JsonInclude
+    public PayStatusEnum getPayStatusEnum() {
+        return EnumUtil.getByCode(payStatus,PayStatusEnum.class);
+    }
 }

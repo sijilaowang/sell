@@ -10,6 +10,7 @@ import com.zx.sell.enums.ResultEnum;
 import com.zx.sell.exception.SellException;
 import com.zx.sell.form.OrderForm;
 import com.zx.sell.repository.OrderMasterRepository;
+import com.zx.sell.service.BuyerService;
 import com.zx.sell.service.OrderService;
 import com.zx.sell.utils.ResultVOUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +38,10 @@ public class BuyerOrderController {
 
     @Autowired
     private OrderService orderService;
+
+    @Autowired
+    private BuyerService buyerService;
+
     //创建订单
     @RequestMapping("/create")
     public ResultVO<Map<Integer,String>> create(@Valid OrderForm orderForm, BindingResult bindingResult) {
@@ -73,9 +78,17 @@ public class BuyerOrderController {
     @RequestMapping("/details")
     public ResultVO<OrderDTO> detail(@RequestParam("openid") String openid,
                                      @RequestParam("orderId") String orderId) {
-        //TODO 不安全的做法，需要改进
-        OrderDTO one = orderService.findOne(orderId);
-        return ResultVOUtil.success(one);
+        //TODO 不安全的做法，需要改进，不是这个openId的人传入其他人的orderId 能查出其他人的数据，这里需要做判断
+        OrderDTO details = buyerService.details(openid, orderId);
+        return ResultVOUtil.success(details);
     }
     //取消订单
+    @RequestMapping("/cancel")
+    public ResultVO cancel(@RequestParam("openid") String openid,
+                           @RequestParam("orderId") String orderId) {
+        //TODO 不安全，需要改进
+        OrderDTO cancel = buyerService.cancel(openid, orderId);
+        return ResultVOUtil.success();
+    }
+    //
 }

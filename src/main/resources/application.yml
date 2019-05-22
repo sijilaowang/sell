@@ -15,6 +15,7 @@ spring:
 server:
   servlet:
     context-path: /sell
+    #这里设置了context-path 所以访问的路劲前缀都要有/sell
 logging:
   pattern:
     console: "%d - %msg%n"
